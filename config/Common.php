@@ -17,6 +17,23 @@ class Common extends Config
             'directory' => $di->get('project')->getPath('views'),
             'fileExtension' => 'html'
         ];
+
+        $di->params['App\Action\BaseAction'] = [
+            'request' => $di->lazyGet('aura/web-kernel:request'),
+            'response' => $di->lazyGet('aura/web-kernel:response')
+        ];
+
+        $di->setter['App\Traits\HasFilter'] = [
+            'setFilter' => $di->lazyGet('calculate/input-filter')
+        ];
+
+        $di->setter['App\Traits\HasCalculation'] = [
+            'setCalculation' => $di->lazyGet('calculate/calculation')
+        ];
+
+        $di->setter['App\Traits\HasEngine'] = [
+            'setEngine' => $di->lazyGet('league/plates:engine')
+        ];
     }
 
     public function modify(Container $di)
@@ -84,8 +101,8 @@ class Common extends Config
          */
         $router = $di->get('aura/web-kernel:router');
 
-        $router->add('hello', '/')
-               ->setValues(array('action' => 'hello'));
+        $router->add('home', '/')
+               ->setValues(array('action' => 'home'));
 
         $router
             ->addPost('calculate', '/calculate')
@@ -97,38 +114,7 @@ class Common extends Config
     {
         $dispatcher = $di->get('aura/web-kernel:dispatcher');
 
-        $dispatcher->setObject('hello', function () use ($di)
-        {
-            $response = $di->get('aura/web-kernel:response');
-            $engine = $di->get('league/plates:engine');
-
-            $response->content->set($engine->render('home'));
-        });
-
-        $dispatcher->setObject('calculate', function () use ($di) {
-            $filter = $di->get('calculate/input-filter');
-            $request = $di->get('aura/web-kernel:request');
-            $response = $di->get('aura/web-kernel:response');
-
-            $response->headers->set('Content-type', 'application/json');
-
-            $post = (array)$request->post;
-            $valid = $filter->values($post);
-
-            if ($valid) {
-                $result = $di->get('calculate/calculation')->calculate(
-                    $post['operation'],
-                    $post['number1'],
-                    $post['number2']);
-                $response->headers->set('Status', 400);
-                $response->content->set(json_encode([
-                    'ok' => true,
-                    'result' => $result]));
-            } else {
-                $response->content->set(json_encode([
-                    'ok' => false,
-                    'result' => $filter->getMessages()]));
-            }
-        });
+        $dispatcher->setObject('home', $di->lazyNew('App\Action\HomeAction'));
+        $dispatcher->setObject('calculate', $di->lazyNew('App\Action\CalculateAction'));
     }
 }

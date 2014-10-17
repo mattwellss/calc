@@ -29,7 +29,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Calculate\\": "src/",
+            "App\\": "src/",
             "Aura\\Framework_Project\\_Config\\": "config/"
         }
     },
