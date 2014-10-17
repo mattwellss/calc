@@ -4,17 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css" />
-    <style type="text/css">
-      label > input {
-        display: none;
-      }
-
-      input:checked + span {
-        background-color: #428BCA;
-        border-color: #357EBD;
-        color: #fff;
-      }
-    </style>
   </head>
   <body>
     <main class="container-fluid">
@@ -27,12 +16,15 @@
             <span class="help-block"></span>
           </div>
           <div class="col-xs-12">
-          <?php foreach ($operations as $operation): ?>
-            <label title="<?= $operation->getName() ?>">
-              <input type="radio" name="operation" value="<?= $operation->getName() ?>">
-              <span class="btn btn-default h2"><?= $operation->getSymbol() ?></span>
-            </label>
-          <?php endforeach; ?>
+            <label class="control-label">Operation</label>
+            <div class="row col-xs-12">
+              <?php foreach ($operations as $operation): ?>
+                <label title="<?= $operation->getName() ?>">
+                  <input class="hidden" type="radio" name="operation" value="<?= $operation->getName() ?>">
+                  <span class="btn btn-default"><?= $operation->getSymbol() ?></span>
+                </label>
+              <?php endforeach; ?>
+            </div>
           </div>
           <div class="col-xs-12">
             <label class="control-label" for="number2">Number</label>
@@ -62,6 +54,17 @@
       var form = $('#calculator');
 
       form.on('submit', submitQuery);
+
+      $(document.body).delegate('input[name="operation"]', 'click', function(e) {
+        $('input[name="operation"]').siblings('span')
+          .removeClass('btn-primary')
+          .addClass('btn-default');
+        $(this).siblings('span')
+          .addClass('btn-primary')
+          .removeClass('btn-default');
+      });
+
+      $('input[name="operation"]:first').click();
 
       function submitQuery (e) {
         e.preventDefault();
