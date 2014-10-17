@@ -20,7 +20,7 @@
             <div class="row col-xs-12">
               <?php foreach ($operations as $operation): ?>
                 <label title="<?= $operation->getName() ?>">
-                  <input class="hidden" type="radio" name="operation" value="<?= $operation->getName() ?>">
+                  <input required class="hidden" type="radio" name="operation" value="<?= $operation->getName() ?>">
                   <span class="btn btn-default"><?= $operation->getSymbol() ?></span>
                 </label>
               <?php endforeach; ?>
@@ -82,8 +82,12 @@
           resultParent.addClass('panel-success');
         } else {
           resultParent.addClass('panel-danger');
-          result.html('Please check the fields for errors');
-          placeErrors(data.result);
+          if (typeof data.result == 'string') {
+            result.html(data.result);
+          } else {
+            result.html('Please check the fields for errors');
+            placeErrors(data.result);
+          }
         }
       }
 
