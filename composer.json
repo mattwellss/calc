@@ -19,7 +19,7 @@
         "monolog/monolog": "~1.0",
         "aura/filter": "dev-master",
         "league/plates": "~3.0",
-        "mattwellss/calculation": "0.1.0"
+        "mattwellss/calculation": "~0.1"
     },
     "repositories": [
         {
