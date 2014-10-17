@@ -35,32 +35,16 @@ class Common extends Config
 
         $filter->addSoftRule('number1', $filter::IS, 'float');
         $filter->addSoftRule('number2', $filter::IS, 'float');
-        $filter->addSoftRule('operation', $filter::IS, 'inValues', ['add', 'subtract', 'multiply', 'divide']);
     }
 
     protected function modifyCalculation(Container $di)
     {
         $calculation = $di->get('calculate/calculation');
 
-        $calculation->addOperation('add', function($a, $b)
-        {
-            return $a + $b;
-        });
-
-        $calculation->addOperation('subtract', function($a, $b)
-        {
-            return $a - $b;
-        });
-
-        $calculation->addOperation('multiply', function($a, $b)
-        {
-            return $a * $b;
-        });
-
-        $calculation->addOperation('divide', function($a, $b)
-        {
-            return $a / $b;
-        });
+        $calculation->addOperation(new \Calculate\AddOperation);
+        $calculation->addOperation(new \Calculate\SubtractOperation);
+        $calculation->addOperation(new \Calculate\MultiplyOperation);
+        $calculation->addOperation(new \Calculate\DivideOperation);
     }
 
     protected function modifyLogger(Container $di)

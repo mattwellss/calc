@@ -18,8 +18,15 @@
         "aura/web-kernel": "~2.0",
         "monolog/monolog": "~1.0",
         "aura/filter": "dev-master",
-        "league/plates": "~3.0"
+        "league/plates": "~3.0",
+        "mattwellss/calculation": "0.1.0"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/mattwellss/calculation"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Calculate\\": "src/",
